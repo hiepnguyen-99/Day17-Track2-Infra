@@ -20,3 +20,11 @@ Answer briefly, in your own words. This is graded on reasoning, not length.
    one where the graph is overkill.
 
 _Write your answers below._
+
+1. Lỗi âm thầm nhất là flatten trace hoặc gán nhãn `split` sai: nếu rơi mất một span con hoặc đánh nhầm `split='eval'`, dữ liệu vẫn sinh ra được nhưng sẽ bị rò rỉ train/eval. Mình sẽ phát hiện bằng kiểm tra số dòng theo `trace_id`, đối chiếu độ phủ trace, và audit mẫu Bronze so với JSON trace gốc.
+
+2. Bỏ decontamination sẽ khiến mô hình học luôn cả prompt mà sau đó mình dùng để chấm. Metric offline nhìn cao hơn thực tế, nhưng lên dữ liệu mới thì không giữ được vì mô hình chỉ học thuộc mẫu trả lời thay vì tổng quát hoá.
+
+3. Một feature nguy hiểm là tổng chi tiêu, số dư, hoặc điểm rủi ro gian lận của khách hàng. Nếu không có point-in-time guard, dòng train có thể lấy giá trị cập nhật sau thời điểm dự đoán, làm accuracy offline cao giả tạo.
+
+4. Graph trả lời tốt các câu hỏi nhiều bước như “kho nào giao phụ kiện của widget?”. Còn truy hồi vector là đủ cho việc tra cứu fact đơn giản, nên dùng graph ở đó là quá tay.
